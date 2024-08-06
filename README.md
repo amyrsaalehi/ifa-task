@@ -31,3 +31,18 @@ To run this project locally, you need to have the following software installed:
    git clone https://github.com/yourusername/vue-todo-pwa.git
    cd vue-todo-pwa
    ```
+   
+2. Install the dependencies:
+    ```bash
+    npm install
+    ```
+
+4. Build the project:
+    ```bash
+    npm run build
+    ```
+
+3. Run the development server:
+    ```bash
+    npm run serve
+    ```
