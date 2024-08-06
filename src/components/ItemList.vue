@@ -8,8 +8,8 @@
         </form>
 
         <!-- Loading and error messages -->
-        <p v-if="loading">Loading items...</p>
-        <p v-if="error">{{ error }}</p>
+        <p class="information" v-if="loading">Loading items...</p>
+        <p class="information" v-if="error">{{ error }}</p>
 
         <!-- List of items -->
         <transition-group name="list" tag="ul">
@@ -137,6 +137,11 @@ button {
 
 button:hover {
     background-color: #45a049;
+}
+
+.information {
+    text-align: center;
+    margin: 1rem 0;
 }
 
 /* Transition styles */
