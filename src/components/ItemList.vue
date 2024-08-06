@@ -9,6 +9,7 @@
 
         <!-- Loading and error messages -->
         <p class="information" v-if="loading">Loading items...</p>
+        <p class="information" v-if="createLoading">Creating...</p>
         <p class="information" v-if="error">{{ error }}</p>
 
         <!-- List of items -->
@@ -21,7 +22,7 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import { ref, onMounted } from 'vue';
 import { fetchItems, addItem, removeItem } from '@/services/api';
 
@@ -29,9 +30,10 @@ export default {
     name: 'ItemList',
     setup() {
         const items = ref([]);
-        const loading = ref(false);
         const error = ref(null);
+        const loading = ref(false);
         const newItemTitle = ref('');
+        const createLoading = ref(false);
 
         // Fetch items when component mounts
         onMounted(async () => {
@@ -52,7 +54,7 @@ export default {
             if (!newItemTitle.value.trim()) return;
 
             try {
-                loading.value = true;
+                createLoading.value = true;
                 const newItem = await addItem({ title: newItemTitle.value, completed: false, userId: 1 });
                 items.value.unshift(newItem);
                 newItemTitle.value = ''; // Clear input after adding
@@ -60,15 +62,17 @@ export default {
                 error.value = 'Failed to add item. Please try again.';
                 console.error(err);
             } finally {
-                loading.value = false;
+                createLoading.value = false;
             }
         };
 
         // Remove an item
-        const removeItemFromList = async (id) => {
+        const removeItemFromList = async (id: number) => {
             try {
                 loading.value = true;
                 await removeItem(id);
+                console.log(id);
+                console.log(items.value.map(i => i.id))
                 items.value = items.value.filter(item => item.id !== id);
             } catch (err) {
                 error.value = 'Failed to remove item. Please try again.';
@@ -80,10 +84,11 @@ export default {
 
         return {
             items,
-            loading,
             error,
-            newItemTitle,
+            loading,
             addNewItem,
+            newItemTitle,
+            createLoading,
             removeItem: removeItemFromList
         };
     }
