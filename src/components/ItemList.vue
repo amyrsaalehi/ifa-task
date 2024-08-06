@@ -23,17 +23,18 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, type Ref } from 'vue';
 import { fetchItems, addItem, removeItem } from '@/services/api';
+import {type Todo} from "@/types/todo";
 
 export default {
     name: 'ItemList',
     setup() {
-        const items = ref([]);
-        const error = ref(null);
-        const loading = ref(false);
-        const newItemTitle = ref('');
-        const createLoading = ref(false);
+        const items: Ref<Todo[]> = ref([]);
+        const error: Ref<string | null> = ref(null);
+        const loading: Ref<boolean> = ref(false);
+        const newItemTitle: Ref<string> = ref('');
+        const createLoading: Ref<boolean> = ref(false);
 
         // Fetch items when component mounts
         onMounted(async () => {
@@ -55,7 +56,7 @@ export default {
 
             try {
                 createLoading.value = true;
-                const newItem = await addItem({ title: newItemTitle.value, completed: false, userId: 1 });
+                const newItem = await addItem({ title: newItemTitle.value, completed: false, userId: 1, id: Math.random() });
                 items.value.unshift(newItem);
                 newItemTitle.value = ''; // Clear input after adding
             } catch (err) {
@@ -71,7 +72,7 @@ export default {
             try {
                 loading.value = true;
                 await removeItem(id);
-                items.value = items.value.filter(item => item.id !== id);
+                items.value = items.value.filter((item: Todo) => item.id !== id);
             } catch (err) {
                 error.value = 'Failed to remove item. Please try again.';
                 console.error(err);
