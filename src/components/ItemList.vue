@@ -71,8 +71,6 @@ export default {
             try {
                 loading.value = true;
                 await removeItem(id);
-                console.log(id);
-                console.log(items.value.map(i => i.id))
                 items.value = items.value.filter(item => item.id !== id);
             } catch (err) {
                 error.value = 'Failed to remove item. Please try again.';
